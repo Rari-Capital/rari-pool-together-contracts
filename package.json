@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/JetJadeja/rari-pool-together-contracts#readme",
   "dependencies": {
+    "@openzeppelin/contracts": "^3.4.1",
     "hardhat": "^2.1.1"
   }
 }
