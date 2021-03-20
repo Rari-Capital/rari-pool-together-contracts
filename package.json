@@ -1,0 +1,22 @@
+{
+  "name": "rari-pool-together-contracts",
+  "version": "1.0.0",
+  "description": "PoolTogether Yield Interface for the Rari Capital ETH Pool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JetJadeja/rari-pool-together-contracts.git"
+  },
+  "author": "Jet Jadeja",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JetJadeja/rari-pool-together-contracts/issues"
+  },
+  "homepage": "https://github.com/JetJadeja/rari-pool-together-contracts#readme",
+  "dependencies": {
+    "hardhat": "^2.1.1"
+  }
+}
