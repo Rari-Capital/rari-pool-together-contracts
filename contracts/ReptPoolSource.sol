@@ -57,7 +57,6 @@ contract ReptPoolSource is IYieldSource {
     /**
         @dev Redeems asset tokens from the Rari ETH Pool.
         @param amount The amount of yield-bearing tokens to be redeemed
-        @return The actual amount of tokens that were redeemed.
      */
     function redeemToken(uint256 amount) external override returns (uint256) {
         IERC20 rft = fundManager.rariFundToken();
@@ -75,10 +74,12 @@ contract ReptPoolSource is IYieldSource {
             msg.sender,
             token.balanceOf(address(this))
         );
+
+        return token.balanceOf(address(this));
     }
 
     /**
-        @return Returns the balance of the address in ETH
+        @return the user balance in ETH
     */
     function balanceOfToken(address account) public override returns (uint256) {
         IERC20 rft = fundManager.rariFundToken();
