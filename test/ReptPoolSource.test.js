@@ -32,21 +32,24 @@ describe("ReptPoolSource", async () => {
 
     it("Deposits ETH, mints REPT", async () => {
         await weth.connect(user).approve(reptPoolSource.address, "1000000000000000000");
-        await reptPoolSource.connect(user).supplyTo("1000000000000000000", userAddress);
+        await reptPoolSource.connect(user).supplyTokenTo("1000000000000000000", userAddress);
         assert((await rept.balanceOf(reptPoolSource.address)).gt(0));
     });
 
     it("Returns correct balance", async () => {
-        assert((await reptPoolSource.callStatic.balanceOf(userAddress)).gt("999999999999999990"));
+        assert((await reptPoolSource.callStatic.balanceOfToken(userAddress)).gt("999999999999999990"));
     })
 
     it("Withdraw WETH, Burn REPT", async () => {
-        const balance = await reptPoolSource.callStatic.balanceOf(userAddress);
-        await reptPoolSource.connect(user).redeem(balance);
-        assert((await reptPoolSource.callStatic.balanceOf(userAddress)).lt(10));
+        console.log((await weth.balanceOf(userAddress)).toString());
+        const balance = await reptPoolSource.callStatic.balanceOfToken(userAddress);
+        
+        await reptPoolSource.connect(user).redeemToken(balance);
+        console.log((await weth.balanceOf(userAddress)).toString());
+        assert((await reptPoolSource.callStatic.balanceOfToken(userAddress)).lt(10));
     });
 
     it("Won't let user withdraw more than balance", async () => {
-        await reptPoolSource.connect(user).redeem("1000").should.be.rejectedWith("revert");
+        await reptPoolSource.connect(user).redeemToken("1000").should.be.rejectedWith("revert");
     });
 });

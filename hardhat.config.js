@@ -1,5 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
-require('dotenv').config()
+require("@nomiclabs/hardhat-etherscan");
+require('dotenv').config();
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
@@ -13,6 +14,10 @@ module.exports = {
         blockNumber: 12077686,
       },
       blockNumber: 12077686,
+    },
+    mainnet: {
+      url: process.env.FORKING_URL,
+      accounts: [`0x${process.env.PRIV}`]
     }
   }
 };
