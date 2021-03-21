@@ -6,6 +6,12 @@ const userAddress = "0x0092081d8e3e570e9e88f4563444bd4b92684502";
 const reptAddress = "0xCda4770d65B4211364Cb870aD6bE19E7Ef1D65f4";
 const wethAddress = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 
+const chai = require("chai");
+const chaiAsPromised = require("chai-as-promised");
+
+chai.use(chaiAsPromised);
+chai.should();
+
 let reptPoolSource, user, weth;
 
 describe("ReptPoolSource", async () => {
@@ -36,6 +42,11 @@ describe("ReptPoolSource", async () => {
 
     it("Withdraw WETH, Burn REPT", async () => {
         const balance = await reptPoolSource.callStatic.balanceOf(userAddress);
-        expect((await reptPoolSource.connect(user).redeem(balance)));
+        await reptPoolSource.connect(user).redeem(balance);
+        assert((await reptPoolSource.callStatic.balanceOf(userAddress)).lt(10));
+    });
+
+    it("Won't let user withdraw more than balance", async () => {
+        await reptPoolSource.connect(user).redeem("1000").should.be.rejectedWith("revert");
     });
 });

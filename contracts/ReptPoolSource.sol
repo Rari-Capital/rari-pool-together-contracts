@@ -60,7 +60,7 @@ contract ReptPoolSource is YieldSourceInterface {
      */
     function redeem(uint256 amount) external override returns (uint256) {
         IERC20 rft = fundManager.rariFundToken();
-        require(balanceOf(msg.sender) >= amount);
+        require(balanceOf(msg.sender) >= amount, "Withdrawal amount is greater than balance");
 
         uint256 balance = rft.balanceOf(address(this));
         fundManager.withdraw(amount);
