@@ -16,7 +16,7 @@ import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
     @dev Handles interactions with the Rari ETH Pool
     @author Jet Jadeja <jet@rari.capital>
 */
-contract ETHPoolSource is YieldSourceInterface {
+contract ReptPoolSource is YieldSourceInterface {
     using SafeERC20 for IERC20; 
     using SafeMath for uint256;
 
@@ -60,10 +60,11 @@ contract ETHPoolSource is YieldSourceInterface {
      */
     function redeem(uint256 amount) external override returns (uint256) {
         IERC20 rft = fundManager.rariFundToken();
+        require(balanceOf(msg.sender) >= amount);
 
         uint256 balance = rft.balanceOf(address(this));
         fundManager.withdraw(amount);
-        uint256 burned = rft.balanceOf(address(this)).sub(balance);
+        uint256 burned = balance.sub(rft.balanceOf(address(this)));
 
         balances[msg.sender] = balances[msg.sender].sub(burned);
     }
@@ -71,25 +72,15 @@ contract ETHPoolSource is YieldSourceInterface {
     /**
         @return Returns the balance of the address in ETH
     */
-    function balanceOf(address account) external override returns (uint256) {
+    function balanceOf(address account) public override returns (uint256) {
         IERC20 rft = fundManager.rariFundToken();
 
         uint256 totalSupply = rft.totalSupply();
-        uint256 balance = balances[msg.sender];
+        uint256 balance = balances[account];
         uint256 fundBalance = fundManager.getFundBalance();
 
         return balance.mul(fundBalance).div(totalSupply);
     }
 
     receive() external payable {}
-
-//   /// @notice Supplies asset tokens to the yield source.
-//   /// @param mintAmount The amount of asset tokens to be supplied
-//   function supplyTo(uint256 mintAmount, address to) external;
-
-//   /// @notice Redeems asset tokens from the yield source.
-//   /// @param redeemAmount The amount of yield-bearing tokens to be redeemed
-//   /// @return The actual amount of tokens that were redeemed.
-//   function redeem(uint256 redeemAmount) external returns (uint256);
-    //recive(); external payable {}
 }
