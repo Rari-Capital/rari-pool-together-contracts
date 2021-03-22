@@ -41,11 +41,9 @@ describe("ReptPoolSource", async () => {
     })
 
     it("Withdraw WETH, Burn REPT", async () => {
-        console.log((await weth.balanceOf(userAddress)).toString());
         const balance = await reptPoolSource.callStatic.balanceOfToken(userAddress);
-        
         await reptPoolSource.connect(user).redeemToken(balance);
-        console.log((await weth.balanceOf(userAddress)).toString());
+        
         assert((await reptPoolSource.callStatic.balanceOfToken(userAddress)).lt(10));
     });
 

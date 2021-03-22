@@ -36,15 +36,14 @@ contract ReptPoolSource is IYieldSource {
     * External Functions *
     ********************/
     
-    /** 
+    /**
         @dev Supply ETH to the Rari ETH Pool
         @param amount The amount of ETH to be supplied to the
     */
     function supplyTokenTo(uint256 amount, address to) external override {
         IERC20 rft = fundManager.rariFundToken();
-        IERC20 token = IERC20(depositToken);
 
-        token.safeTransferFrom(msg.sender, address(this), amount);
+        IERC20(depositToken).safeTransferFrom(msg.sender, address(this), amount);
         IWETH(depositToken).withdraw(amount);
 
         uint256 balance = rft.balanceOf(address(this));
@@ -70,12 +69,14 @@ contract ReptPoolSource is IYieldSource {
         balances[msg.sender] = balances[msg.sender].sub(burned);
 
         IWETH(depositToken).deposit{value: address(this).balance}();
+
+        uint256 transfer = token.balanceOf(address(this));
         token.safeTransfer(
             msg.sender,
-            token.balanceOf(address(this))
+            transfer
         );
 
-        return token.balanceOf(address(this));
+        return transfer;
     }
 
     /**
